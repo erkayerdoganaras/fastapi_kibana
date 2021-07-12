@@ -43,8 +43,7 @@ async def arama():
             "status":"SUCCESS",
             "message":"DONDU",
             "data":results}
-    except:
-        except Exception as e:
+    except Exception as e:
         return {
             "status": "FAILURE",
             "message": "DONMEDI"+str(e)
