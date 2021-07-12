@@ -12,7 +12,44 @@ from elasticsearch import Elasticsearch,helpers
 router = APIRouter()
 es=Elasticsearch(['http://168.119.224.222:32072'])
 
+@router.get("/all") #Thıs function takes a very long time while collecting all the data
+async def arama():
+    try:
+        query_body = {
 
+            "query": {
+                "bool": {
+                    "must":
+                        {
+                            "match_phrase": {
+                                "_index":{
+                                    "query":"logstash*"}
+
+
+                            }
+                        },
+                    "filter": [
+                        {
+                            "match_all": {}
+                        }
+                    ],
+                    "should": [],
+                    "must_not": []
+                }
+            }
+        }
+        results = helpers.scan(es ,query=query_body)
+        return {
+            "status":"SUCCESS",
+            "message":"DONDU",
+            "data":results}
+    except:
+        except Exception as e:
+        return {
+            "status": "FAILURE",
+            "message": "DONMEDI"+str(e)
+        }
+    
 @router.get("/all/paginated")
 async def arama(*, er: int = Query(None)):
     try:
